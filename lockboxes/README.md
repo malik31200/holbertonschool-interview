@@ -1,0 +1,1 @@
+Function that Determine if all the boxes can be opened
