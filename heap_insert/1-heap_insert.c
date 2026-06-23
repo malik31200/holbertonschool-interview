@@ -24,7 +24,7 @@ static void heapify_up(heap_t *node)
 }
 
 /**
- * get_last_node - finds last level order node parent
+ * get_last_parent - level order insertion parent
  */
 static heap_t *get_last_parent(heap_t *root)
 {
@@ -45,19 +45,13 @@ static heap_t *get_last_parent(heap_t *root)
 		}
 		else
 			return (tmp);
-
-		if (tmp->left)
-			queue[j++] = tmp->left;
-
-		if (tmp->right)
-			queue[j++] = tmp->right;
 	}
 
 	return (NULL);
 }
 
 /**
- * heap_insert - inserts a value in Max Binary Heap
+ * heap_insert - inserts value in max heap
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
