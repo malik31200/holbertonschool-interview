@@ -14,13 +14,15 @@ static void swap_values(int *a, int *b)
 /**
  * heapify_up - restores max heap property
  */
-static void heapify_up(heap_t *node)
+static heap_t *heapify_up(heap_t *node)
 {
 	while (node->parent && node->n > node->parent->n)
 	{
 		swap_values(&node->n, &node->parent->n);
 		node = node->parent;
 	}
+
+	return (node);
 }
 
 /**
@@ -76,11 +78,13 @@ heap_t *heap_insert(heap_t **root, int value)
 	node->parent = parent;
 
 	if (parent->left == NULL)
+	{
 		parent->left = node;
+	}
 	else
+	{
 		parent->right = node;
+	}
 
-	heapify_up(node);
-
-	return (node);
+		return (heapify_up(node));
 }
