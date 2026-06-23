@@ -24,39 +24,14 @@ static void heapify_up(heap_t *node)
 }
 
 /**
- * get_last_parent - level order insertion parent
- */
-static heap_t *get_last_parent(heap_t *root)
-{
-	heap_t *queue[1024];
-	int i = 0, j = 0;
-	heap_t *tmp;
-
-	queue[j++] = root;
-
-	while (i < j)
-	{
-		tmp = queue[i++];
-
-		if (tmp->left && tmp->right)
-		{
-			queue[j++] = tmp->left;
-			queue[j++] = tmp->right;
-		}
-		else
-			return (tmp);
-	}
-
-	return (NULL);
-}
-
-/**
- * heap_insert - inserts value in max heap
+ * heap_insert - inserts a value into Max Binary Heap
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
 	heap_t *node;
 	heap_t *parent;
+	heap_t *queue[1024];
+	int front = 0, back = 0;
 
 	if (root == NULL)
 		return (NULL);
@@ -71,16 +46,32 @@ heap_t *heap_insert(heap_t **root, int value)
 		return (node);
 	}
 
-	parent = get_last_parent(*root);
+	queue[back++] = *root;
 
-	node->parent = parent;
+	while (front < back)
+	{
+		parent = queue[front++];
 
-	if (parent->left == NULL)
-		parent->left = node;
-	else
-		parent->right = node;
+		if (parent->left)
+			queue[back++] = parent->left;
+		else
+		{
+			parent->left = node;
+			node->parent = parent;
+			heapify_up(node);
+			return (node);
+		}
 
-	heapify_up(node);
+		if (parent->right)
+			queue[back++] = parent->right;
+		else
+		{
+			parent->right = node;
+			node->parent = parent;
+			heapify_up(node);
+			return (node);
+		}
+	}
 
 	return (node);
 }
