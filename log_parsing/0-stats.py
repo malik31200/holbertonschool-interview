@@ -5,12 +5,6 @@ Reads stdin line by line and computes metrics
 """
 
 import sys
-import re
-
-
-LOG_PATTERN = re.compile(
-    r'^\S+ - \[.*\] "GET /projects/260 HTTP/1\.1" (?P<status>\d{3}) (?P<size>\d+)$'
-)
 
 
 def print_stats(total_size, status_codes):
@@ -40,13 +34,18 @@ if __name__ == "__main__":
 
     try:
         for line in sys.stdin:
-            match = LOG_PATTERN.match(line.rstrip())
-            if match is None:
+            parts = line.split()
+            if len(parts) < 2:
                 continue
 
-            total_size += int(match.group("size"))
+            try:
+                size = int(parts[-1])
+                code = parts[-2]
+            except (TypeError, ValueError):
+                continue
 
-            code = match.group("status")
+            total_size += size
+
             if code in status_codes:
                 status_codes[code] += 1
 
