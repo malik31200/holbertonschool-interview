@@ -19,15 +19,16 @@ static void swap(int *a, int *b)
  * sift_down - Sifts an element down in a max heap
  *
  * @array: Array to modify
- * @size: Size of the heap
+ * @heap_size: Current size of the heap
  * @root: Root index
+ * @size: Total size of the array
  */
-static void sift_down(int *array, size_t size, size_t root)
+static void sift_down(int *array, size_t heap_size, size_t root, size_t size)
 {
 	size_t child;
 	size_t largest;
 
-	while (root * 2 + 1 < size)
+	while (root * 2 + 1 < heap_size)
 	{
 		child = root * 2 + 1;
 		largest = root;
@@ -35,7 +36,8 @@ static void sift_down(int *array, size_t size, size_t root)
 		if (array[child] > array[largest])
 			largest = child;
 
-		if (child + 1 < size && array[child + 1] > array[largest])
+		if (child + 1 < heap_size &&
+		    array[child + 1] > array[largest])
 			largest = child + 1;
 
 		if (largest == root)
@@ -64,7 +66,7 @@ void heap_sort(int *array, size_t size)
 	while (i > 0)
 	{
 		i--;
-		sift_down(array, size, i);
+		sift_down(array, size, i, size);
 	}
 
 	i = size - 1;
@@ -72,7 +74,7 @@ void heap_sort(int *array, size_t size)
 	{
 		swap(&array[0], &array[i]);
 		print_array(array, size);
-		sift_down(array, i, 0);
+		sift_down(array, i, 0, size);
 		i--;
 	}
 }
