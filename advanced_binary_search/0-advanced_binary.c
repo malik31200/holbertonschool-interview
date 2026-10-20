@@ -4,8 +4,8 @@
 
 /**
  * print_array - Prints the elements of an array
- * @array: Pointer to the first element
- * @size: Number of elements to print
+ * @array: Pointer to the array
+ * @size: Number of elements
  */
 static void print_array(int *array, size_t size)
 {
@@ -22,10 +22,10 @@ static void print_array(int *array, size_t size)
 }
 
 /**
- * advanced_binary_recursive - Searches for the first occurrence
- * @array: Pointer to the first element of the subarray
- * @size: Number of elements in the subarray
- * @value: Value to search for
+ * advanced_binary_recursive - Recursively searches for a value
+ * @array: Pointer to the current subarray
+ * @size: Size of the current subarray
+ * @value: Value to find
  * @offset: Starting index in the original array
  *
  * Return: First index of value, or -1
@@ -43,31 +43,32 @@ static int advanced_binary_recursive(int *array, size_t size,
 
 	mid = (size - 1) / 2;
 
-	if (array[mid] >= value)
+	if (size == 1)
+		return (array[0] == value ? (int)offset : -1);
+
+	if (array[mid] == value)
 	{
-		if (array[mid] == value)
-		{
-			result = advanced_binary_recursive(array, mid,
-							   value, offset);
-			if (result != -1)
-				return (result);
-			return ((int)(offset + mid));
-		}
-		return (advanced_binary_recursive(array, mid, value, offset));
+		result = advanced_binary_recursive(array, mid, value, offset);
+		if (result != -1)
+			return (result);
+		return ((int)(offset + mid));
 	}
 
-	return (advanced_binary_recursive(array + mid + 1,
-					  size - mid - 1,
-					  value, offset + mid + 1));
+	if (array[mid] < value)
+		return (advanced_binary_recursive(array + mid + 1,
+						  size - mid - 1,
+						  value, offset + mid + 1));
+
+	return (advanced_binary_recursive(array, mid + 1, value, offset));
 }
 
 /**
  * advanced_binary - Searches for the first occurrence of a value
- * @array: Pointer to the first element of the array
- * @size: Number of elements in the array
- * @value: Value to search for
+ * @array: Pointer to the array
+ * @size: Number of elements
+ * @value: Value to find
  *
- * Return: First index of value, or -1
+ * Return: Index of the first occurrence, or -1
  */
 int advanced_binary(int *array, size_t size, int value)
 {
