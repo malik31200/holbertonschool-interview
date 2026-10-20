@@ -40,7 +40,7 @@ static int advanced_binary_recursive(int *array, size_t size,
 
 	print_array(array, size);
 
-	mid = (size - 1) / 2;
+	mid = size / 2;
 
 	if (array[mid] == value)
 	{
