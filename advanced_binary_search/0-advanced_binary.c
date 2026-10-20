@@ -64,7 +64,7 @@ static int advanced_binary_recursive(int *array, size_t size,
  * @size: Number of elements in the array
  * @value: Value to search for
  *
- * Return: First index where value is found, or -1
+ * Return: First index of value, or -1
  */
 int advanced_binary(int *array, size_t size, int value)
 {
