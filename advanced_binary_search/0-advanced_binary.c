@@ -45,13 +45,19 @@ static int advanced_binary_recursive(int *array, size_t size,
 	if (size == 1)
 		return (array[0] == value ? (int)offset : -1);
 
+	
 	if (array[mid] == value)
 	{
-		result = advanced_binary_recursive(array, mid, value, offset);
+		if (mid == 0)
+			return ((int)offset);
+
+		result = advanced_binary_recursive(array, mid + 1,
+						   value, offset);
 		if (result != -1)
 			return (result);
 		return ((int)(offset + mid));
 	}
+
 
 	if (array[mid] < value)
 		return (advanced_binary_recursive(array + mid + 1,
