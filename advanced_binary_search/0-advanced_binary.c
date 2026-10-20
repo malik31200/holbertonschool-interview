@@ -7,7 +7,7 @@
  * @array: Pointer to the first element
  * @size: Number of elements to print
  */
-void print_array(int *array, size_t size)
+static void print_array(int *array, size_t size)
 {
 	size_t i;
 
@@ -22,16 +22,16 @@ void print_array(int *array, size_t size)
 }
 
 /**
- * advanced_binary_recursive - Searches recursively for the first occurrence
- * @array: Pointer to the first element of the current subarray
- * @size: Number of elements in the current subarray
+ * advanced_binary_recursive - Searches for the first occurrence
+ * @array: Pointer to the first element of the subarray
+ * @size: Number of elements in the subarray
  * @value: Value to search for
- * @offset: Starting index of the current subarray in the original array
+ * @offset: Starting index in the original array
  *
- * Return: First index where value is found, or -1
+ * Return: First index of value, or -1
  */
-int advanced_binary_recursive(int *array, size_t size,
-			      int value, size_t offset)
+static int advanced_binary_recursive(int *array, size_t size,
+				     int value, size_t offset)
 {
 	size_t mid;
 
