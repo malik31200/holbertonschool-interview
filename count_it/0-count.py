@@ -1,6 +1,5 @@
-
 #!/usr/bin/python3
-"""Count keywords in hot Reddit articles."""
+# Count keywords in hot Reddit articles.
 import requests
 
 
