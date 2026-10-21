@@ -10,24 +10,19 @@
  */
 static size_t heap_size(heap_t *root)
 {
-	size_t left, right;
-
 	if (root == NULL)
 		return (0);
 
-	left = heap_size(root->left);
-	right = heap_size(root->right);
-
-	return (1 + left + right);
+	return (1 + heap_size(root->left) + heap_size(root->right));
 }
 
 /**
- * get_last_node - Finds the last node in level order.
+ * get_last_node - Finds the last node in level-order.
  * @root: Pointer to the root node.
  * @index: Index of the node to find.
- * @current: Current index in level order.
+ * @current: Current index.
  *
- * Return: Pointer to the requested node, or NULL.
+ * Return: Pointer to the node, or NULL.
  */
 static heap_t *get_last_node(heap_t *root, size_t index,
 		size_t *current)
@@ -82,7 +77,7 @@ static void sift_down(heap_t *root)
  * heap_extract - Extracts the root node of a Max Binary Heap.
  * @root: Double pointer to the heap root.
  *
- * Return: The extracted value, or 0 on failure.
+ * Return: Extracted value, or 0 on failure.
  */
 int heap_extract(heap_t **root)
 {
@@ -104,7 +99,7 @@ int heap_extract(heap_t **root)
 	}
 
 	last = get_last_node(*root, size - 1, &current);
-	if (last == NULL)
+	if (last == NULL || last->parent == NULL)
 		return (0);
 
 	(*root)->n = last->n;
