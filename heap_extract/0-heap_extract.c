@@ -30,7 +30,7 @@ static size_t heap_size(heap_t *root)
  * Return: Pointer to the requested node, or NULL.
  */
 static heap_t *get_last_node(heap_t *root, size_t index,
-			     size_t *current)
+		size_t *current)
 {
 	heap_t *node;
 
