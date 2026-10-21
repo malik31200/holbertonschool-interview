@@ -45,7 +45,7 @@ static int advanced_binary_recursive(int *array, size_t size,
 	if (size == 1)
 		return (array[0] == value ? (int)offset : -1);
 
-	
+
 	if (array[mid] == value)
 	{
 		if (mid == 0)
