@@ -1,4 +1,3 @@
-
 #include "binary_trees.h"
 #include <stdlib.h>
 
@@ -17,31 +16,48 @@ static size_t heap_size(heap_t *root)
 }
 
 /**
- * get_last_node - Finds the last node in level-order.
+ * get_last_node - Finds a node by its level-order index.
  * @root: Pointer to the root node.
  * @index: Index of the node to find.
- * @current: Current index.
  *
  * Return: Pointer to the node, or NULL.
  */
-static heap_t *get_last_node(heap_t *root, size_t index,
-		size_t *current)
+static heap_t *get_last_node(heap_t *root, size_t index)
 {
+	heap_t **queue;
 	heap_t *node;
+	size_t size, head = 0, tail = 0, current = 0;
 
 	if (root == NULL)
 		return (NULL);
 
-	if (*current == index)
-		return (root);
+	size = heap_size(root);
+	queue = malloc(sizeof(heap_t *) * size);
+	if (queue == NULL)
+		return (NULL);
 
-	(*current)++;
-	node = get_last_node(root->left, index, current);
-	if (node != NULL)
-		return (node);
+	queue[tail++] = root;
 
-	node = get_last_node(root->right, index, current);
-	return (node);
+	while (head < tail)
+	{
+		node = queue[head++];
+
+		if (current == index)
+		{
+			free(queue);
+			return (node);
+		}
+		current++;
+
+		if (node->left != NULL)
+			queue[tail++] = node->left;
+
+		if (node->right != NULL)
+			queue[tail++] = node->right;
+	}
+
+	free(queue);
+	return (NULL);
 }
 
 /**
@@ -58,10 +74,10 @@ static void sift_down(heap_t *root)
 
 	largest = root;
 
-	if (root->left && root->left->n > largest->n)
+	if (root->left != NULL && root->left->n > largest->n)
 		largest = root->left;
 
-	if (root->right && root->right->n > largest->n)
+	if (root->right != NULL && root->right->n > largest->n)
 		largest = root->right;
 
 	if (largest != root)
@@ -82,8 +98,9 @@ static void sift_down(heap_t *root)
 int heap_extract(heap_t **root)
 {
 	heap_t *last;
-	size_t size, current = 0;
+	heap_t *parent;
 	int value;
+	size_t size;
 
 	if (root == NULL || *root == NULL)
 		return (0);
@@ -98,16 +115,17 @@ int heap_extract(heap_t **root)
 		return (value);
 	}
 
-	last = get_last_node(*root, size - 1, &current);
+	last = get_last_node(*root, size - 1);
 	if (last == NULL || last->parent == NULL)
 		return (0);
 
 	(*root)->n = last->n;
+	parent = last->parent;
 
-	if (last->parent->left == last)
-		last->parent->left = NULL;
+	if (parent->left == last)
+		parent->left = NULL;
 	else
-		last->parent->right = NULL;
+		parent->right = NULL;
 
 	free(last);
 	sift_down(*root);
