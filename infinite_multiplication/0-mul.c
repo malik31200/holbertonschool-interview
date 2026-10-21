@@ -71,50 +71,39 @@ static char *multiply(char *a, char *b)
 	la = string_length(a);
 	lb = string_length(b);
 	len = la + lb;
-
 	digits = malloc(sizeof(int) * len);
 	if (digits == NULL)
 		return (NULL);
-
 	for (i = 0; i < len; i++)
 		digits[i] = 0;
-
 	for (i = la; i > 0; i--)
 	{
 		carry = 0;
-
 		for (j = lb; j > 0; j--)
 		{
 			k = i + j - 1;
 			product = (a[i - 1] - '0') * (b[j - 1] - '0');
 			product += digits[k] + carry;
-
 			digits[k] = product % 10;
 			carry = product / 10;
 		}
-
 		digits[i - 1] += carry;
 	}
-
 	i = 0;
 	while (i < len - 1 && digits[i] == 0)
 		i++;
-
 	result = malloc(len - i + 1);
 	if (result == NULL)
 	{
 		free(digits);
 		return (NULL);
 	}
-
 	for (j = 0; i < len; i++, j++)
 		result[j] = digits[i] + '0';
-
 	result[j] = '\0';
 	free(digits);
 	return (result);
 }
-
 /**
  * main - Multiplies two positive integers.
  * @argc: Argument count.
