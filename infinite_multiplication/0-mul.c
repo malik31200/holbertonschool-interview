@@ -1,38 +1,39 @@
+
 #include "holberton.h"
 #include <stdlib.h>
 
 /**
- * string_length - Calculates the length of a string.
- * @str: The string to measure.
+ * string_length - Returns the length of a string.
+ * @s: String to measure.
  *
- * Return: The length of the string.
+ * Return: String length.
  */
-static unsigned int string_length(char *str)
+static unsigned int string_length(char *s)
 {
 	unsigned int len = 0;
 
-	while (str[len] != '\0')
+	while (s[len] != '\0')
 		len++;
 
 	return (len);
 }
 
 /**
- * is_digit_string - Checks whether a string contains only digits.
- * @str: The string to check.
+ * is_digits - Checks whether a string contains only digits.
+ * @s: String to check.
  *
- * Return: 1 if valid, otherwise 0.
+ * Return: 1 if valid, 0 otherwise.
  */
-static int is_digit_string(char *str)
+static int is_digits(char *s)
 {
 	unsigned int i;
 
-	if (str[0] == '\0')
+	if (s[0] == '\0')
 		return (0);
 
-	for (i = 0; str[i] != '\0'; i++)
+	for (i = 0; s[i] != '\0'; i++)
 	{
-		if (str[i] < '0' || str[i] > '9')
+		if (s[i] < '0' || s[i] > '9')
 			return (0);
 	}
 
@@ -40,9 +41,9 @@ static int is_digit_string(char *str)
 }
 
 /**
- * print_error - Prints Error and exits with status 98.
+ * error - Prints Error and exits with status 98.
  */
-static void print_error(void)
+static void error(void)
 {
 	_putchar('E');
 	_putchar('r');
@@ -54,63 +55,72 @@ static void print_error(void)
 }
 
 /**
- * multiply - Multiplies two positive integers of arbitrary length.
- * @num1: First number as a string.
- * @num2: Second number as a string.
+ * multiply - Multiplies two arbitrarily large positive integers.
+ * @a: First number.
+ * @b: Second number.
  *
- * Return: Pointer to the result string, or NULL on failure.
+ * Return: Allocated result string, or NULL on allocation failure.
  */
-static char *multiply(char *num1, char *num2)
+static char *multiply(char *a, char *b)
 {
-	unsigned int len1, len2, total, i, j, pos;
-	int product, carry;
+	unsigned int la, lb, len, i, j, k;
+	int *digits;
 	char *result;
+	int carry, product;
 
-	len1 = string_length(num1);
-	len2 = string_length(num2);
-	total = len1 + len2;
+	la = string_length(a);
+	lb = string_length(b);
+	len = la + lb;
 
-	result = malloc(total + 1);
-	if (result == NULL)
+	digits = malloc(sizeof(int) * len);
+	if (digits == NULL)
 		return (NULL);
 
-	for (i = 0; i < total; i++)
-		result[i] = 0;
-	result[total] = '\0';
+	for (i = 0; i < len; i++)
+		digits[i] = 0;
 
-	for (i = len1; i > 0; i--)
+	for (i = la; i > 0; i--)
 	{
 		carry = 0;
 
-		for (j = len2; j > 0; j--)
+		for (j = lb; j > 0; j--)
 		{
-			pos = i + j - 1;
-			product = (num1[i - 1] - '0') *
-				(num2[j - 1] - '0') + result[pos] + carry;
+			k = i + j - 1;
+			product = (a[i - 1] - '0') * (b[j - 1] - '0');
+			product += digits[k] + carry;
 
-			result[pos] = product % 10;
+			digits[k] = product % 10;
 			carry = product / 10;
 		}
 
-		result[i - 1] += carry;
+		digits[i - 1] += carry;
 	}
 
-	pos = 0;
-	while (pos < total - 1 && result[pos] == 0)
-		pos++;
+	i = 0;
+	while (i < len - 1 && digits[i] == 0)
+		i++;
 
-	for (i = pos; i < total; i++)
-		result[i] += '0';
+	result = malloc(len - i + 1);
+	if (result == NULL)
+	{
+		free(digits);
+		return (NULL);
+	}
 
+	for (j = 0; i < len; i++, j++)
+		result[j] = digits[i] + '0';
+
+	result[j] = '\0';
+	free(digits);
 	return (result);
 }
 
 /**
- * main - Multiplies two positive numbers.
- * @argc: Number of arguments.
- * @argv: Array of arguments.
+ * main - Multiplies two positive integers.
+ * @argc: Argument count.
+ * @argv: Argument vector.
  *
- * Return: 0 on success, or 98 on error.
+ * Return: 0 on success, 98 on error.
  */
 int main(int argc, char **argv)
 {
@@ -118,23 +128,20 @@ int main(int argc, char **argv)
 	unsigned int i;
 
 	if (argc != 3)
-		print_error();
+		error();
 
-	if (!is_digit_string(argv[1]) || !is_digit_string(argv[2]))
-		print_error();
+	if (!is_digits(argv[1]) || !is_digits(argv[2]))
+		error();
 
 	result = multiply(argv[1], argv[2]);
 	if (result == NULL)
-		print_error();
+		error();
 
-	i = 0;
-	while (result[i] != '\0')
-	{
+	for (i = 0; result[i] != '\0'; i++)
 		_putchar(result[i]);
-		i++;
-	}
-	_putchar('\n');
 
+	_putchar('\n');
 	free(result);
 	return (0);
 }
+
