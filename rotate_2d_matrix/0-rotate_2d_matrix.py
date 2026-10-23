@@ -1,4 +1,3 @@
-
 #!/usr/bin/python3
 """Rotate a 2D matrix 90 degrees clockwise."""
 
